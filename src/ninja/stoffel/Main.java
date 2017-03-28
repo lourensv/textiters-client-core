@@ -1,3 +1,5 @@
+package ninja.stoffel;
+
 import java.io.*;
 import java.net.Socket;
 /**
@@ -7,7 +9,7 @@ public class Main {
 
     public static void main(String[] args) {
         int port = 9999;
-        String server = "10.0.0.9";
+        String server = "127.0.0.1";
 
         try {
             Socket client = new Socket(server, port);
