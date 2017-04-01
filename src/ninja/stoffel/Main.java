@@ -1,34 +1,38 @@
 package ninja.stoffel;
 
-import java.io.*;
-import java.net.Socket;
+import ninja.stoffel.network.NetworkManager;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.regex.Pattern;
+
 /**
  * Created by Lourens on 10/30/2016.
  */
 public class Main {
 
+    private static final Pattern PATTERN = Pattern.compile(
+            "^(([01]?\\d\\d?|2[0-4]\\d|25[0-5])\\.){3}([01]?\\d\\d?|2[0-4]\\d|25[0-5])$");
+
     public static void main(String[] args) {
-        int port = 9999;
-        String server = "127.0.0.1";
-
         try {
-            Socket client = new Socket(server, port);
+            int port = 9999;
+            String server = "104.155.163.153";//"textiters.stoffel.ninja";
+            String ip = server;
+            if (!validate(server)) {
+                ip = InetAddress.getByName(server).getHostAddress();
+            }
 
-            OutputStream outToServer = client.getOutputStream();
-            PrintWriter out = new PrintWriter(client.getOutputStream(), true);
-            System.out.println("Connected to server");
-            out.print("Hello from " + client.getLocalAddress());
-            out.flush();
-
-//            InputStream inFromServer = client.getInputStream();
-            BufferedReader in = new  BufferedReader( new InputStreamReader(client.getInputStream()));
-            System.out.println(in.readLine());
-            client.close();
-
-        } catch (IOException e) {
+            NetworkManager networkManager = new NetworkManager(port, ip);
+            networkManager.connect();
+        } catch (UnknownHostException e) {
             e.printStackTrace();
         }
+    }
 
+
+    public static boolean validate(final String ip) {
+        return PATTERN.matcher(ip).matches();
     }
 
 }
