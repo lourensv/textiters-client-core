@@ -4,6 +4,7 @@ import ninja.stoffel.network.NetworkManager;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 import java.util.regex.Pattern;
 
 /**
@@ -17,7 +18,7 @@ public class Main {
     public static void main(String[] args) {
         try {
             int port = 9999;
-            String server = "104.155.163.153";//"textiters.stoffel.ninja";
+            String server = "127.0.0.1";//"textiters.stoffel.ninja";
             String ip = server;
             if (!validate(server)) {
                 ip = InetAddress.getByName(server).getHostAddress();
@@ -25,6 +26,15 @@ public class Main {
 
             NetworkManager networkManager = new NetworkManager(port, ip);
             networkManager.connect();
+
+            Scanner scan = new Scanner(System.in);
+
+            System.out.println("Enter the data:");
+            while (true) {
+                String inData = scan.nextLine();
+                networkManager.send(inData);
+            }
+
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
