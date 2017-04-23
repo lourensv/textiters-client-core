@@ -1,6 +1,8 @@
 package ninja.stoffel;
 
+import ninja.stoffel.network.MessageProtos;
 import ninja.stoffel.network.NetworkManager;
+import org.apache.commons.codec.binary.Base64;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -29,10 +31,15 @@ public class Main {
 
             Scanner scan = new Scanner(System.in);
 
+
             System.out.println("Enter the data:");
             while (true) {
                 String inData = scan.nextLine();
-                networkManager.send(inData);
+                MessageProtos.Message message = MessageProtos.Message.newBuilder()
+                        .setContent(inData)
+                        .build();
+                String msg = Base64.encodeBase64String(message.toByteArray());
+                networkManager.send(msg);
             }
 
         } catch (UnknownHostException e) {
